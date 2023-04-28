@@ -27,9 +27,9 @@ class Database extends Config
     public array $default = [
         'DSN'      => '',
         'hostname' => 'localhost',
-        'username' => 'vitasoft_villagesurvey',
-        'password' => 'Villagesurvey_240423',
-        'database' => 'vitasoft_villagesurvey',
+        'username' => 'vitasoft_easecrop',
+        'password' => 'EaseCrop_280423',
+        'database' => 'vitasoft_easecrop',
         'DBDriver' => 'MySQLi',
         'DBPrefix' => '',
         'pConnect' => false,
