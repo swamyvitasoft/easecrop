@@ -43,35 +43,13 @@ $routes->group('/', ['filter' => 'AlreadyLoggedIn'], function ($routes) {
 $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->group('dashboard/', static function ($routes) {
         $routes->get(Hash::path('index'), 'Dashboard::index');
-        $routes->post(Hash::path('regAction'), 'Dashboard::regAction');
-        $routes->post(Hash::path('logAction'), 'Dashboard::logAction');
-        $routes->get(Hash::path('add'), 'Dashboard::add');
-        $routes->post(Hash::path('addAction'), 'Dashboard::addAction');
-        $routes->get(Hash::path('view'), 'Dashboard::view');
-        $routes->post(Hash::path('auth1'), 'Dashboard::auth1');
-        $routes->get(Hash::path('auth') . '/(:any)', 'Dashboard::auth/$1');
-        $routes->get(Hash::path('show') . '/(:any)', 'Dashboard::show/$1');
-        $routes->get(Hash::path('edit') . '/(:any)', 'Dashboard::edit/$1');
-        $routes->get(Hash::path('delete') . '/(:any)', 'Dashboard::delete/$1');
         $routes->get(Hash::path('changepwd'), 'Dashboard::changepwd');
         $routes->post(Hash::path('updatepwd'), 'Dashboard::updatepwd');
     });
-    $routes->group('agents/', static function ($routes) {
-        $routes->get(Hash::path('index'), 'Agents::index');
-        $routes->get(Hash::path('add'), 'Agents::add');
-        $routes->post(Hash::path('addAction'), 'Agents::addAction');
-    });
-    $routes->group('topics/', static function ($routes) {
-        $routes->get(Hash::path('index'), 'Topics::index');
-        $routes->get(Hash::path('add'), 'Topics::add');
-        $routes->post(Hash::path('addAction'), 'Topics::addAction');
-    });
-    $routes->group('survey/', static function ($routes) {
-        $routes->get(Hash::path('index'), 'Survey::index');
-        $routes->post(Hash::path('addAction'), 'Survey::addAction');
-    });
-    $routes->group('members/', static function ($routes) {
-        $routes->get(Hash::path('index'), 'Members::index');
+    $routes->group('drone/', static function ($routes) {
+        $routes->get(Hash::path('index'), 'Drone::index');
+        $routes->get(Hash::path('add'), 'Drone::add');
+        $routes->post(Hash::path('addAction'), 'Drone::addAction');
     });
 });
 $routes->get('logout', 'Login::logout');

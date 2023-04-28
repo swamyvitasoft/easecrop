@@ -22,13 +22,27 @@ use App\Libraries\Hash;
             </div>
             <div class="row justify-content-md-center">
                 <div class="col">
-                    <a href="<?= site_url() ?>drons/<?= Hash::path('index') ?>">
+                    <a href="<?= site_url() ?>drone/<?= Hash::path('index') ?>">
                         <div class="card card-hover">
                             <div class="box bg-warning text-center">
                                 <h1 class="font-light text-white">
                                     <i class="mdi mdi-view-dashboard"></i>
                                 </h1>
-                                <h6 class="text-white">Drons</h6>
+                                <h6 class="text-white">Drone</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col">
+                    <a href="<?= site_url() ?>customer/<?= Hash::path('index') ?>">
+                        <div class="card card-hover">
+                            <div class="box bg-success text-center">
+                                <h1 class="font-light text-white">
+                                    <i class="mdi mdi-view-dashboard"></i>
+                                </h1>
+                                <h6 class="text-white">Customer</h6>
                             </div>
                         </div>
                     </a>
