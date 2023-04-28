@@ -53,6 +53,7 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
     });
     $routes->group('customer/', static function ($routes) {
         $routes->get(Hash::path('index'), 'Customer::index');
+        $routes->post(Hash::path('view'), 'Customer::view');
     });
     $routes->group('payment/', static function ($routes) {
         $routes->get(Hash::path('index'), 'Payment::index');

@@ -30,4 +30,19 @@ class Customer extends BaseController
             . view('customer/index')
             . view('common/bottom');
     }
+    public function view()
+    {
+        $mobile = $this->request->getPost("mobile");
+        $customerData = $this->customerModel->where(['mobile' => $mobile])->findAll();
+        if (!empty($customerData)) {
+            $data = [
+                'success' => true,
+                'customer_id'   => $customerData[0]['customer_id'],
+                'name'   => $customerData[0]['name'],
+                'mobile'   => $customerData[0]['mobile'],
+                'msg' => "Exists Employee Check your Data"
+            ];
+        }
+        return $this->response->setJSON($data);
+    }
 }

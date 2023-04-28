@@ -34,7 +34,7 @@ use App\Libraries\Hash;
                             <form action="<?= site_url() ?>payment/<?= Hash::path('paymentAction') ?>" method="post" role="form" class="php-email-form" enctype="multipart/form-data">
                                 <div class="form-group mt-3">
                                     <label for="cmobile" class="form-label">Customer Mobile</label>
-                                    <input type="text" name="cmobile" class="form-control form-control-lg" id="cmobile" placeholder="Customer Mobile" value="<?= set_value('cmobile') ?>">
+                                    <input type="text" name="cmobile" class="form-control form-control-lg cmobile" id="cmobile" placeholder="Customer Mobile" value="<?= set_value('cmobile') ?>">
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'cmobile') : '' ?></small>
                                 </div>
                                 <div class="form-group mt-3">
@@ -43,14 +43,14 @@ use App\Libraries\Hash;
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'cname') : '' ?></small>
                                 </div>
                                 <div class="form-group mt-3">
+                                    <label for="rmobile" class="form-label">Reference Mobile</label>
+                                    <input type="text" name="rmobile" class="form-control form-control-lg rmobile" id="rmobile" placeholder="Reference Mobile" value="<?= set_value('rmobile') ?>">
+                                    <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'rmobile') : '' ?></small>
+                                </div>
+                                <div class="form-group mt-3">
                                     <label for="rname" class="form-label">Reference Name</label>
                                     <input type="text" name="rname" class="form-control form-control-lg" id="rname" placeholder="Reference Name" value="<?= set_value('rname') ?>">
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'rname') : '' ?></small>
-                                </div>
-                                <div class="form-group mt-3">
-                                    <label for="rmobile" class="form-label">Reference Mobile</label>
-                                    <input type="text" name="rmobile" class="form-control form-control-lg" id="rmobile" placeholder="Reference Mobile" value="<?= set_value('rmobile') ?>">
-                                    <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'rmobile') : '' ?></small>
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="crop_place" class="form-label">Crop Place</label>
@@ -98,8 +98,8 @@ use App\Libraries\Hash;
                                     <input type="number" name="amount" class="form-control form-control-lg" id="amount" placeholder="Amount" value="<?= set_value('amount') ?>">
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'amount') : '' ?></small>
                                 </div>
-                                <input type="text" name="customer_id" id="customer_id" value="">
-                                <input type="text" name="reference_id" id="reference_id" value="">
+                                <input type="hidden" name="customer_id" id="customer_id" value="">
+                                <input type="hidden" name="reference_id" id="reference_id" value="">
                                 <div class="text-center"><button type="submit" class="btn btn-success btn-lg">Payment</button></div>
                             </form>
                         </div>
@@ -110,3 +110,54 @@ use App\Libraries\Hash;
     </div>
     <?= view('common/footer1') ?>
 </div>
+<script src="<?= site_url() ?>assets/libs/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(document).on("blur", ".cmobile", function(e) {
+            e.preventDefault();
+            var cmobile = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: "<?= site_url() ?>customer/<?= Hash::path('view') ?>",
+                data: {
+                    mobile: cmobile
+                },
+                success: function(data) {
+                    if ($.trim(data.customer_id) == '') {} else {
+                        $("#customer_id").val(data.customer_id);
+                        $("#cname").val(data.name);
+                        $("#cmobile").val(data.mobile);
+                        $("#cname").attr('readonly', 'true');
+                        $("#cmobile").attr('readonly', 'true');
+                    }
+                },
+                error: function(data) {
+                    alert('network error try again.');
+                },
+            });
+        });
+        $(document).on("blur", ".rmobile", function(e) {
+            e.preventDefault();
+            var rmobile = $(this).val();
+            $.ajax({
+                type: "POST",
+                url: "<?= site_url() ?>customer/<?= Hash::path('view') ?>",
+                data: {
+                    mobile: rmobile
+                },
+                success: function(data) {
+                    if ($.trim(data.customer_id) == '') {} else {
+                        $("#reference_id").val(data.customer_id);
+                        $("#rname").val(data.name);
+                        $("#rmobile").val(data.mobile);
+                        $("#rname").attr('readonly', 'true');
+                        $("#rmobile").attr('readonly', 'true');
+                    }
+                },
+                error: function(data) {
+                    alert('network error try again.');
+                },
+            });
+        });
+    });
+</script>
