@@ -20,8 +20,8 @@ class Drone extends BaseController
     {
         $this->droneInfo = $this->droneModel->findAll();
         $data = [
-            'pageTitle' => 'EASE CROP | Dashboard',
-            'pageHeading' => 'Dashboard',
+            'pageTitle' => 'EASE CROP | Drone',
+            'pageHeading' => 'Drone',
             'loggedInfo' => $this->loggedInfo,
             'droneInfo'    => $this->droneInfo
         ];
@@ -32,8 +32,8 @@ class Drone extends BaseController
     public function add()
     {
         $data = [
-            'pageTitle' => 'EASE CROP | Dashboard',
-            'pageHeading' => 'Dashboard',
+            'pageTitle' => 'EASE CROP | Drone',
+            'pageHeading' => 'Drone',
             'loggedInfo' => $this->loggedInfo
         ];
         return view('common/top', $data)
