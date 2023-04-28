@@ -10,25 +10,17 @@ class Dashboard extends BaseController
 {
     private $loggedInfo;
     private $loginModel;
-    private $topicsModel;
     public function __construct()
     {
         $this->loginModel = new LoginModel();
         $this->loggedInfo = session()->get('LoggedData');
-        $this->topicsModel = new TopicsModel();
     }
     public function index()
     {
-        $topicsInfo = $this->topicsModel->findAll();
-        $topic = [];
-        foreach ($topicsInfo as $key => $value) {
-            $topic[] = array($value['topic_id']);
-        }
         $data = [
-            'pageTitle' => 'Village Survey | Dashboard',
+            'pageTitle' => 'Ease Crop | Dashboard',
             'pageHeading' => 'Dashboard',
-            'loggedInfo' => $this->loggedInfo,
-            'topic'    => ($topic)
+            'loggedInfo' => $this->loggedInfo
         ];
         return view('common/top', $data)
             . view('dashboard/index')
@@ -37,7 +29,7 @@ class Dashboard extends BaseController
     public function changepwd()
     {
         $data = [
-            'pageTitle' => 'Village Survey | Dashboard',
+            'pageTitle' => 'Ease Crop | Dashboard',
             'pageHeading' => 'Dashboard',
             'loggedInfo' => $this->loggedInfo
         ];
@@ -55,11 +47,13 @@ class Dashboard extends BaseController
                 ]
             ],
             'password' => [
-                'rules'  => 'required',
+                'rules'  => 'required|min_length[5]|max_length[20]',
                 'errors' => [
-                    'required' => 'Password is required.'
-                ]
-            ]
+                    'required' => 'Password is required.',
+                    'min_length' => 'Password must have atleast 5 characters in length.',
+                    'max_length' => 'Password must not have characters more thant 20 in length.',
+                ],
+            ],
         ]);
         if (!$validation) {
             return  redirect()->back()->with('validation', $this->validator)->withInput();
