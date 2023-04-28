@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\CustomerModel;
+
+$customerModel = new CustomerModel();
+
 use App\Libraries\Hash;
 ?>
 <div class="main-wrapper">
@@ -61,6 +65,62 @@ use App\Libraries\Hash;
                         </div>
                     </a>
                 </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="10" class="bg-success text-white">Today Service</th>
+                        </tr>
+                    </thead>
+                    <?php
+                    foreach ($todayInfo as $key1 => $row1) {
+                        $customer1 = $customerModel->where(['customer_id' => $row1['customer_id']])->find();
+                    ?>
+                        <tr>
+                            <td><?= $customer1[0]['name'] ?></td>
+                            <td><?= $customer1[0]['mobile'] ?></td>
+                            <td><?= $row1['crop_place'] ?></td>
+                            <td><?= $row1['acre'] ?> Acre</td>
+                            <td><?= $row1['service'] ?></td>
+                            <td><?= $row1['crop'] ?></td>
+                            <td><?= $row1['crop_age'] ?> Months</td>
+                            <td><?= $row1['fertilizer'] ?></td>
+                            <td><?= $row1['estimated_date'] ?></td>
+                            <td><?= $row1['amount'] ?></td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </table>
+            </div>
+            <div class="table-responsive mt-3">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th colspan="10" class="bg-warning text-white">Tomorrow Service</th>
+                        </tr>
+                    </thead>
+                    <?php
+                    foreach ($tomorrowInfo as $key2 => $row2) {
+                        $customer2 = $customerModel->where(['customer_id' => $row2['customer_id']])->find();
+                    ?>
+                        <tr>
+                            <td><?= $customer2[0]['name'] ?></td>
+                            <td><?= $customer2[0]['mobile'] ?></td>
+                            <td><?= $row2['crop_place'] ?></td>
+                            <td><?= $row2['acre'] ?> Acre</td>
+                            <td><?= $row2['service'] ?></td>
+                            <td><?= $row2['crop'] ?></td>
+                            <td><?= $row2['crop_age'] ?> months</td>
+                            <td><?= $row2['fertilizer'] ?></td>
+                            <td><?= $row2['estimated_date'] ?></td>
+                            <td><?= $row2['amount'] ?></td>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </table>
             </div>
         </div>
     </div>

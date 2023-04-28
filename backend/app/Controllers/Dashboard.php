@@ -4,23 +4,30 @@ namespace App\Controllers;
 
 use App\Libraries\Hash;
 use App\Models\LoginModel;
+use App\Models\PaymentModel;
 use App\Models\TopicsModel;
 
 class Dashboard extends BaseController
 {
     private $loggedInfo;
     private $loginModel;
+    private $paymentModel;
     public function __construct()
     {
         $this->loginModel = new LoginModel();
         $this->loggedInfo = session()->get('LoggedData');
+        $this->paymentModel = new PaymentModel();
     }
     public function index()
     {
+        $todayInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d')])->findAll();
+        $tomorrowInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d', strtotime('+ 1 day'))])->findAll();
         $data = [
             'pageTitle' => 'Ease Crop | Dashboard',
             'pageHeading' => 'Dashboard',
-            'loggedInfo' => $this->loggedInfo
+            'loggedInfo' => $this->loggedInfo,
+            'todayInfo' => $todayInfo,
+            'tomorrowInfo' => $tomorrowInfo
         ];
         return view('common/top', $data)
             . view('dashboard/index')
