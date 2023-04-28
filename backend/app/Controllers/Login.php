@@ -15,15 +15,16 @@ class Login extends BaseController
     public function login()
     {
         $data = [
-            'pageTitle' => 'Village Survey | Login'
+            'pageTitle' => 'Ease Crop | Login',
+            'logo' => site_url() . 'assets/images/logo.jpeg'
         ];
         return view('login/index', $data);
     }
     public function create()
     {
         csrf_field();
-        $name = "Admin";
-        $username = "admin";
+        $name = "Ease Crop";
+        $username = "easecrop";
         $password = "123456";
         $values = [
             'role' => 'Admin',

@@ -29,14 +29,15 @@
         <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
             <div class="auth-box bg-dark border-top border-secondary">
                 <div class="text-center pt-3 pb-3">
+                    <span class="db"><img src="<?= $logo ?>" alt="logo" class="img-fluid" /></span>
                 </div>
                 <div id="loginform">
                     <div class="text-center">
-                        <span class="text-dark">Enter your correct username, password below and you will go to admin dashboard.</span>
+                        <span class="text-dark">You will go to admin dashboard Enter.</span>
                     </div>
                     <div class="row mt-3">
                         <!-- Form -->
-                        <form class="col-12" id="loginform" action="<?= site_url() ?>check" method="post">
+                        <form class="col" id="loginform" action="<?= site_url() ?>check" method="post">
                             <?= csrf_field(); ?>
                             <?php if (!empty(session()->getFlashdata('fail'))) : ?>
                                 <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
@@ -44,7 +45,7 @@
                                 <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
                             <?php endif ?>
                             <div class="row pb-4">
-                                <div class="col-12">
+                                <div class="col">
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text bg-success text-white h-100" id="basic-addon1"><i class="mdi mdi-lock fs-4"></i></span>
@@ -62,10 +63,10 @@
                                 </div>
                             </div>
                             <div class="row border-top border-secondary">
-                                <div class="col-12">
+                                <div class="col">
                                     <div class="form-group">
                                         <div class="pt-3">
-                                            <button class="btn btn-info" id="to-recover" type="button">
+                                            <button class="btn btn-warning" id="to-recover" type="button">
                                                 <i class="mdi mdi-lock fs-4 me-1"></i> Lost password?
                                             </button>
                                             <button class="btn btn-success float-end text-white" type="submit">
@@ -85,7 +86,7 @@
                     </div>
                     <div class="row mt-3">
                         <!-- Form -->
-                        <form class="col-12" id="recoverform" action="<?= site_url() ?>recover" method="post" onsubmit="if (! confirm('Confirm to recover your password?')) { return false; }">
+                        <form class="col" id="recoverform" action="<?= site_url() ?>recover" method="post" onsubmit="if (! confirm('Confirm to recover your password?')) { return false; }">
                             <?= csrf_field(); ?>
                             <?php if (!empty(session()->getFlashdata('fail'))) : ?>
                                 <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
@@ -102,7 +103,7 @@
                             </div>
                             <!-- pwd -->
                             <div class="row mt-3 pt-3 border-top border-secondary">
-                                <div class="col-12">
+                                <div class="col">
                                     <a class="btn btn-success text-white" href="#" id="to-login" name="action">Back To Login</a>
                                     <button class="btn btn-info float-end" type="submit" name="action">
                                         Recover
