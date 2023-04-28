@@ -54,6 +54,10 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->group('customer/', static function ($routes) {
         $routes->get(Hash::path('index'), 'Customer::index');
     });
+    $routes->group('payment/', static function ($routes) {
+        $routes->get(Hash::path('index'), 'Payment::index');
+        $routes->post(Hash::path('paymentAction'), 'Payment::paymentAction');
+    });
 });
 $routes->get('logout', 'Login::logout');
 
