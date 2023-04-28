@@ -51,6 +51,9 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
         $routes->get(Hash::path('add'), 'Drone::add');
         $routes->post(Hash::path('addAction'), 'Drone::addAction');
     });
+    $routes->group('customer/', static function ($routes) {
+        $routes->get(Hash::path('index'), 'Customer::index');
+    });
 });
 $routes->get('logout', 'Login::logout');
 
