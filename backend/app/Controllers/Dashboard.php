@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Libraries\Hash;
+use App\Models\CustomerModel;
+use App\Models\DroneModel;
 use App\Models\LoginModel;
 use App\Models\PaymentModel;
 use App\Models\TopicsModel;
@@ -12,22 +14,47 @@ class Dashboard extends BaseController
     private $loggedInfo;
     private $loginModel;
     private $paymentModel;
+    private $droneModel;
+    private $customerModel;
     public function __construct()
     {
         $this->loginModel = new LoginModel();
         $this->loggedInfo = session()->get('LoggedData');
         $this->paymentModel = new PaymentModel();
+        $this->droneModel = new DroneModel();
+        $this->customerModel = new CustomerModel();
     }
     public function index()
     {
-        $todayInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d')])->findAll();
-        $tomorrowInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d', strtotime('+ 1 day'))])->findAll();
+        if ($this->loggedInfo['role'] == "Drone") {
+            $todayInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d'), 'login_id' => $this->loggedInfo['login_id']])->findAll();
+            $tomorrowInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d', strtotime('+ 1 day')), 'login_id' => $this->loggedInfo['login_id']])->findAll();
+            $cash = $this->paymentModel->where(['payment_type' => 'Cash', 'login_id' => $this->loggedInfo['login_id']])->select('sum(amount) as amount')->first();
+            $credit = $this->paymentModel->where(['payment_type' => 'Credit', 'login_id' => $this->loggedInfo['login_id']])->select('sum(amount) as amount')->first();
+            $drone = $this->droneModel->countAllResults();
+            $customer = $this->customerModel->where(['login_id' => $this->loggedInfo['login_id']])->countAllResults();
+        } else {
+            $todayInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d')])->findAll();
+            $tomorrowInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d', strtotime('+ 1 day'))])->findAll();
+            $cash = $this->paymentModel->where(['payment_type' => 'Cash'])->select('sum(amount) as amount')->first();
+            $credit = $this->paymentModel->where(['payment_type' => 'Credit'])->select('sum(amount) as amount')->first();
+            $drone = $this->droneModel->countAllResults();
+            $customer = $this->customerModel->countAllResults();
+        }
+
+        $cash = $cash['amount'] > 0 ? $cash['amount'] : '0';
+        $credit = $credit['amount'] > 0 ? $credit['amount'] : '0';
         $data = [
             'pageTitle' => 'Ease Crop | Dashboard',
             'pageHeading' => 'Dashboard',
             'loggedInfo' => $this->loggedInfo,
             'todayInfo' => $todayInfo,
-            'tomorrowInfo' => $tomorrowInfo
+            'tomorrowInfo' => $tomorrowInfo,
+            'cash'  => $cash,
+            'credit'  => $credit,
+            'drone' => $drone,
+            'customer' => $customer,
+            'payment' => $cash + $credit
         ];
         return view('common/top', $data)
             . view('dashboard/index')
