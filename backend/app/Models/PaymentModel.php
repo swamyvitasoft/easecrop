@@ -8,5 +8,5 @@ class PaymentModel extends Model
 {
     protected $table      = 'payment';
     protected $primaryKey = 'payment_id';
-    protected $allowedFields = ['customer_id', 'crop_place', 'reference_id', 'acre', 'service', 'crop', 'crop_age', 'fertilizer', 'estimated_date', 'amount', 'login_id', 'status'];
+    protected $allowedFields = ['customer_id', 'crop_place', 'reference_id', 'acre', 'service', 'crop', 'crop_age', 'fertilizer', 'estimated_date', 'amount', 'payment_type', 'login_id', 'status', 'create_date'];
 }

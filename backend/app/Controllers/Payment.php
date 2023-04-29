@@ -122,8 +122,10 @@ class Payment extends BaseController
                 'fertilizer' => $this->request->getPost("fertilizer"),
                 'estimated_date' => $this->request->getPost("estimated_date"),
                 'amount' => $this->request->getPost("amount"),
+                'payment_type' => $this->request->getPost("payment_type"),
                 'login_id' => $this->loggedInfo['login_id'],
-                'status' => 1
+                'status' => 1,
+                'create_date' => date('Y-m-d H:i:s')
             ];
             $query = $this->paymentModel->insert($inputData);
         }
@@ -132,5 +134,23 @@ class Payment extends BaseController
         } else {
             return  redirect()->to('dashboard/' . Hash::path('index'))->with('success', 'Congratulations! Payment Done');
         }
+    }
+    public function paid()
+    {
+        $inputData = array(
+            'payment_type'    => 'Cash',
+        );
+        $payment_id = $this->request->getPost("payment_id");
+        $query = $this->paymentModel->update($payment_id, $inputData);
+        if (!$query) {
+            $data = [
+                'success' => false
+            ];
+        } else {
+            $data = [
+                'success' => true
+            ];
+        }
+        return $this->response->setJSON($data);
     }
 }
