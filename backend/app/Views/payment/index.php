@@ -85,7 +85,13 @@ use App\Libraries\Hash;
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="fertilizer" class="form-label">Fertilizer</label>
-                                    <input type="text" name="fertilizer" class="form-control form-control-lg" id="fertilizer" placeholder="Fertilizer" value="<?= set_value('fertilizer') ?>">
+                                    <select name="fertilizer" class="form-control form-control-lg" id="fertilizer">
+                                        <option value="" selected disabled>Select</option>
+                                        <option value="Fertilizer">Fertilizer</option>
+                                        <option value="Pesticides">Pesticides</option>
+                                        <option value="Seeds">Seeds</option>
+                                        <option value="Others">Others</option>
+                                    </select>
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'fertilizer') : '' ?></small>
                                 </div>
                                 <div class="form-group mt-3">
@@ -97,6 +103,11 @@ use App\Libraries\Hash;
                                     <label for="amount" class="form-label">Amount</label>
                                     <input type="number" name="amount" class="form-control form-control-lg" id="amount" placeholder="Amount" value="<?= set_value('amount') ?>">
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'amount') : '' ?></small>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="payment_type" class="form-label">Payment Type</label><br>
+                                    <input type="radio" class="form-check-input" name="payment_type" id="payment_type_cash" value="Cash" checked>Cash
+                                    <input type="radio" class="form-check-input" name="payment_type" id="payment_type_credit" value="Credit">Credit
                                 </div>
                                 <input type="hidden" name="customer_id" id="customer_id" value="">
                                 <input type="hidden" name="reference_id" id="reference_id" value="">
