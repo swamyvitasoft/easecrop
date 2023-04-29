@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Libraries\Hash;
 use App\Models\DroneModel;
+use App\Models\LoginModel;
 
 class Drone extends BaseController
 {
@@ -14,6 +15,7 @@ class Drone extends BaseController
     public function __construct()
     {
         $this->droneModel = new DroneModel();
+        $this->loginModel = new LoginModel();
         $this->loggedInfo = session()->get('LoggedData');
     }
     public function index()
@@ -66,11 +68,21 @@ class Drone extends BaseController
         if (!$validation) {
             return  redirect()->back()->with('validation', $this->validator)->withInput();
         } else {
+            $password = "123456";
+            $values = [
+                'role' => 'Drone',
+                'name' => $this->request->getPost("pilot_operator"),
+                'username' => $this->request->getPost("mobile"),
+                'password' => Hash::make($password),
+            ];
+            $this->loginModel->insert($values);
+            $login_id = $this->loginModel->getInsertID();
             $inputData = [
                 'drone_number' => $this->request->getPost("drone_number"),
                 'pilot_operator' => $this->request->getPost("pilot_operator"),
                 'mobile' => $this->request->getPost("mobile"),
-                'login_id' => $this->loggedInfo['login_id'],
+                'login_id' => $login_id,
+                'created_by' => $this->loggedInfo['login_id'],
                 'status' => 1
             ];
             $query = $this->droneModel->insert($inputData);
