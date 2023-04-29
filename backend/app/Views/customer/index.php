@@ -15,7 +15,12 @@
             </div>
             <div class="row">
                 <?= csrf_field(); ?>
-                <?php if (!empty(session()->getFlashdata('fail'))) : ?>
+                <?php
+
+                use App\Libraries\Hash;
+                use App\Models\PaymentModel;
+
+                if (!empty(session()->getFlashdata('fail'))) : ?>
                     <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
                 <?php elseif (!empty(session()->getFlashdata('success'))) : ?>
                     <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
@@ -33,15 +38,29 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Mobile</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
+                                        $paymentModel = new PaymentModel();
                                         foreach ($customerInfo as $index => $row) {
+                                            $payment1 = $paymentModel->where(['customer_id' => $row['customer_id']])->findAll();
                                         ?>
                                             <tr>
                                                 <td><?= $row['name'] ?> </td>
                                                 <td><?= $row['mobile'] ?> </td>
+                                                <?php
+                                                if (!empty($payment1)) {
+                                                ?>
+                                                    <td><a href="<?= site_url() ?>customer/<?= Hash::path('show') ?>/<?= $row['customer_id'] ?>">Payment</a></td>
+                                                <?php
+                                                } else {
+                                                ?>
+                                                    <td>Referenced</td>
+                                                <?php
+                                                }
+                                                ?>
                                             </tr>
                                         <?php
                                         }
@@ -51,6 +70,7 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Mobile</th>
+                                            <th>Status</th>
                                         </tr>
                                     </tfoot>
                                 </table>
