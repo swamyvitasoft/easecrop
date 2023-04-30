@@ -72,7 +72,13 @@ class Payment extends BaseController
             'estimated_date' => [
                 'rules'  => 'required',
                 'errors' => [
-                    'required' => 'Estimated Date Age is required.'
+                    'required' => 'Next Estimated Date is required.'
+                ]
+            ],
+            'estimated_fps' => [
+                'rules'  => 'required',
+                'errors' => [
+                    'required' => 'Next Estimated F/P/S is required.'
                 ]
             ],
             'amount' => [
@@ -121,6 +127,7 @@ class Payment extends BaseController
                 'crop_age' => $this->request->getPost("crop_age"),
                 'fertilizer' => $this->request->getPost("fertilizer"),
                 'estimated_date' => $this->request->getPost("estimated_date"),
+                'estimated_fps' => $this->request->getPost("estimated_fps"),
                 'amount' => $this->request->getPost("amount"),
                 'payment_type' => $this->request->getPost("payment_type"),
                 'login_id' => $this->loggedInfo['login_id'],

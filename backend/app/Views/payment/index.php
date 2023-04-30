@@ -84,7 +84,7 @@ use App\Libraries\Hash;
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'crop_age') : '' ?></small>
                                 </div>
                                 <div class="form-group mt-3">
-                                    <label for="fertilizer" class="form-label">Fertilizer</label>
+                                    <label for="fertilizer" class="form-label">Fertilizer / Pesticides / Seeds</label>
                                     <select name="fertilizer" class="form-control form-control-lg" id="fertilizer">
                                         <option value="" selected disabled>Select</option>
                                         <option value="Fertilizer">Fertilizer</option>
@@ -95,9 +95,14 @@ use App\Libraries\Hash;
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'fertilizer') : '' ?></small>
                                 </div>
                                 <div class="form-group mt-3">
-                                    <label for="estimated_date" class="form-label">Estimated Date</label>
+                                    <label for="estimated_date" class="form-label">Next Estimated Date</label>
                                     <input type="date" name="estimated_date" class="form-control form-control-lg" id="estimated_date" placeholder="Estimated Date" value="<?= set_value('estimated_date') ?>">
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'estimated_date') : '' ?></small>
+                                </div>
+                                <div class="form-group mt-3">
+                                    <label for="estimated_fps" class="form-label">Next Estimated F/P/S</label>
+                                    <input type="text" name="estimated_fps" class="form-control form-control-lg" id="estimated_fps" placeholder="Estimated F/P/S" value="<?= set_value('estimated_fps') ?>">
+                                    <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'estimated_fps') : '' ?></small>
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="amount" class="form-label">Amount</label>
