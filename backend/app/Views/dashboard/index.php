@@ -82,9 +82,28 @@ use App\Libraries\Hash;
                     </a>
                 </div>
             </div>
-            <div class="row justify-content-md-center">
-                <div class="col">
-                    <a href="<?= site_url() ?>payment/<?= Hash::path('index') ?>">
+            <?php
+            if ($loggedInfo['role'] == "Drone") {
+            ?>
+                <div class="row justify-content-md-center">
+                    <div class="col">
+                        <a href="<?= site_url() ?>payment/<?= Hash::path('index') ?>">
+                            <div class="card card-hover">
+                                <div class="box bg-cyan text-center">
+                                    <h1 class="font-light text-white">
+                                        <?= $payment ?>
+                                    </h1>
+                                    <h6 class="text-white">Payment</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            <?php
+            } else {
+            ?>
+                <div class="row justify-content-md-center">
+                    <div class="col">
                         <div class="card card-hover">
                             <div class="box bg-cyan text-center">
                                 <h1 class="font-light text-white">
@@ -93,14 +112,16 @@ use App\Libraries\Hash;
                                 <h6 class="text-white">Payment</h6>
                             </div>
                         </div>
-                    </a>
+                    </div>
                 </div>
-            </div>
+            <?php
+            }
+            ?>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th colspan="11" class="bg-success text-white">Today Service</th>
+                            <th colspan="12" class="bg-success text-white">Today Service</th>
                         </tr>
                     </thead>
                     <?php
@@ -116,6 +137,7 @@ use App\Libraries\Hash;
                             <td><?= $row1['crop'] ?></td>
                             <td><?= $row1['crop_age'] ?> Months</td>
                             <td><?= $row1['fertilizer'] ?></td>
+                            <td><?= $row1['estimated_fps'] ?></td>
                             <td><?= date("d-m-Y", strtotime($row1['estimated_date'])) ?></td>
                             <td><?= date("d-m-Y", strtotime($row1['create_date'])) ?></td>
                             <td><?= $row1['amount'] ?></td>
@@ -129,7 +151,7 @@ use App\Libraries\Hash;
                 <table class="table">
                     <thead>
                         <tr>
-                            <th colspan="11" class="bg-warning text-white">Tomorrow Service</th>
+                            <th colspan="12" class="bg-warning text-white">Tomorrow Service</th>
                         </tr>
                     </thead>
                     <?php
@@ -145,6 +167,7 @@ use App\Libraries\Hash;
                             <td><?= $row2['crop'] ?></td>
                             <td><?= $row2['crop_age'] ?> months</td>
                             <td><?= $row2['fertilizer'] ?></td>
+                            <td><?= $row2['estimated_fps'] ?></td>
                             <td><?= date("d-m-Y", strtotime($row2['estimated_date'])) ?></td>
                             <td><?= date("d-m-Y", strtotime($row2['create_date'])) ?></td>
                             <td><?= $row2['amount'] ?></td>
