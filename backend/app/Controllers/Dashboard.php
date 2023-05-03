@@ -103,4 +103,39 @@ class Dashboard extends BaseController
             }
         }
     }
+    public function calendar()
+    {
+        $data = [
+            'pageTitle' => 'Ease Crop | Dashboard',
+            'pageHeading' => 'Dashboard',
+            'loggedInfo' => $this->loggedInfo
+        ];
+        return view('dashboard/calendar', $data);
+    }
+    public function load()
+    {
+        $this->paymentModel->table('payment');
+        $this->paymentModel->join('customer', 'payment.customer_id = customer.customer_id');
+        $todayInfo = $this->paymentModel->groupBy('customer.mobile')->findAll();
+
+        // $todayInfo = $this->paymentModel->findAll();
+        foreach ($todayInfo as $key => $row) {
+            $data[] = array(
+                'id' => $row['payment_id'],
+                'title' => $row['name'],
+                'mobile'  => $row['mobile'],
+                'crop_place'  => $row['crop_place'],
+                'acre'  => $row['acre'],
+                'service'  => $row['service'],
+                'crop'  => $row['crop'],
+                'crop_age'  => $row['crop_age'],
+                'fertilizer'  => $row['fertilizer'],
+                'start' => $row['estimated_date'],
+                'end' => $row['estimated_date'],
+                'estimated_fps'  => $row['estimated_fps'],
+                'url' => $row['mobile'],
+            );
+        }
+        echo json_encode($data);
+    }
 }

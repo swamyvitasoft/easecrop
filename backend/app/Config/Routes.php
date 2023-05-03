@@ -45,6 +45,8 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
         $routes->get(Hash::path('index'), 'Dashboard::index');
         $routes->get(Hash::path('changepwd'), 'Dashboard::changepwd');
         $routes->post(Hash::path('updatepwd'), 'Dashboard::updatepwd');
+        $routes->get(Hash::path('calendar'), 'Dashboard::calendar');
+        $routes->get('load', 'Dashboard::load');
     });
     $routes->group('drone/', static function ($routes) {
         $routes->get(Hash::path('index'), 'Drone::index');
