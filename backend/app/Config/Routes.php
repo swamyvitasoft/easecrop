@@ -46,12 +46,14 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
         $routes->get(Hash::path('changepwd'), 'Dashboard::changepwd');
         $routes->post(Hash::path('updatepwd'), 'Dashboard::updatepwd');
         $routes->get(Hash::path('calendar'), 'Dashboard::calendar');
+        $routes->get(Hash::path('recheck'), 'Dashboard::recheck');
         $routes->get('load', 'Dashboard::load');
     });
     $routes->group('drone/', static function ($routes) {
         $routes->get(Hash::path('index'), 'Drone::index');
         $routes->get(Hash::path('add'), 'Drone::add');
         $routes->post(Hash::path('addAction'), 'Drone::addAction');
+        $routes->get(Hash::path('show') . '/(:any)', 'Drone::show/$1');
     });
     $routes->group('customer/', static function ($routes) {
         $routes->get(Hash::path('index'), 'Customer::index');

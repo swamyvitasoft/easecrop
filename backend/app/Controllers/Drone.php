@@ -93,4 +93,10 @@ class Drone extends BaseController
             return  redirect()->to('drone/' . Hash::path('index'))->with('success', 'Congratulations! Drone Registered');
         }
     }
+    public function show($login_id = 0){
+        session()->remove('LoggedData');
+        $logged_info = $this->loginModel->where('login_id', $login_id)->first();
+        session()->set('LoggedData', $logged_info);
+        return  redirect()->to('dashboard/' . Hash::path('index'));
+    }
 }

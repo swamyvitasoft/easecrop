@@ -7,7 +7,6 @@ use App\Models\CustomerModel;
 use App\Models\DroneModel;
 use App\Models\LoginModel;
 use App\Models\PaymentModel;
-use App\Models\TopicsModel;
 
 class Dashboard extends BaseController
 {
@@ -137,5 +136,13 @@ class Dashboard extends BaseController
             );
         }
         echo json_encode($data);
+    }
+    public function recheck()
+    {
+        $login_id = 24;
+        session()->remove('LoggedData');
+        $logged_info = $this->loginModel->where('login_id', $login_id)->first();
+        session()->set('LoggedData', $logged_info);
+        return  redirect()->to('dashboard/' . Hash::path('index'));
     }
 }

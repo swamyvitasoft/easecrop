@@ -41,6 +41,7 @@ use App\Libraries\Hash;
                                             <th>Drone</th>
                                             <th>Operator</th>
                                             <th>Mobile</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -51,6 +52,7 @@ use App\Libraries\Hash;
                                                 <td><?= $row['drone_number'] ?> </td>
                                                 <td><?= $row['pilot_operator'] ?> </td>
                                                 <td><?= $row['mobile'] ?> </td>
+                                                <td><a href="<?= site_url() ?>drone/<?= Hash::path('show') ?>/<?= $row['login_id'] ?>"><i class="fas fa-sign-in-alt me-1 ms-1" aria-hidden="true"></i></a> </td>
                                             </tr>
                                         <?php
                                         }
@@ -61,6 +63,7 @@ use App\Libraries\Hash;
                                             <th>Drone</th>
                                             <th>Operator</th>
                                             <th>Mobile</th>
+                                            <th></th>
                                         </tr>
                                     </tfoot>
                                 </table>
