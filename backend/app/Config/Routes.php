@@ -58,6 +58,7 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
     $routes->group('customer/', static function ($routes) {
         $routes->get(Hash::path('index'), 'Customer::index');
         $routes->post(Hash::path('view'), 'Customer::view');
+        $routes->post(Hash::path('view1'), 'Customer::view1');
         $routes->get(Hash::path('show') . '/(:any)', 'Customer::show/$1');
         $routes->get(Hash::path('history'), 'Customer::history');
         $routes->get(Hash::path('credit'), 'Customer::credit');
@@ -67,6 +68,7 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
         $routes->get(Hash::path('index'), 'Payment::index');
         $routes->post(Hash::path('paymentAction'), 'Payment::paymentAction');
         $routes->post(Hash::path('paid'), 'Payment::paid');
+        $routes->post(Hash::path('pending'), 'Payment::pending');
     });
 });
 $routes->get('logout', 'Login::logout');
