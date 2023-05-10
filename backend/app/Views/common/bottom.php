@@ -24,17 +24,39 @@
     <script src="<?= site_url() ?>assets/libs/chart/jquery.flot.pie.min.js"></script>
     <script src="<?= site_url() ?>assets/libs/chart/turning-series.js"></script>
     <!--Table Related Script-->
-    <script src="<?= site_url() ?>assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
+    <!-- <script src="<?= site_url() ?>assets/extra-libs/multicheck/datatable-checkbox-init.js"></script>
     <script src="<?= site_url() ?>assets/extra-libs/multicheck/jquery.multicheck.js"></script>
-    <script src="<?= site_url() ?>assets/extra-libs/DataTables/datatables.min.js"></script>
+    <script src="<?= site_url() ?>assets/extra-libs/DataTables/datatables.min.js"></script> -->
+    <!--Table Related Script-->
+    <script type="text/javascript" language="javascript" src="<?= site_url() ?>assets/custom-libs/advanced-datatable/js/jquery.js"></script>
+    <script type="text/javascript" language="javascript" src="<?= site_url() ?>assets/custom-libs/advanced-datatable/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" src="<?= site_url() ?>assets/custom-libs/advanced-datatable/js/DT_bootstrap.js"></script>
     <!--Advanced View Hide DataTables Script-->
     <script src="<?= site_url() ?>assets/custom-libs/datatables.min.js"></script>
+    <script src="<?= site_url() ?>assets/custom-libs/dropzone/dropzone.js"></script>
+    <!-- Export excel -->
+    <script type="text/javascript" language="javascript" src="<?= site_url() ?>assets/custom-libs/datatables/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?= site_url() ?>assets/custom-libs/datatables/js/jszip.min.js"></script>
+    <script type="text/javascript" language="javascript" src="<?= site_url() ?>assets/custom-libs/datatables/js/buttons.html5.min.js"></script>
     <!-- File Upload -->
     <script src="<?= site_url() ?>assets/custom-libs/bootstrap-fileupload/bootstrap-fileupload.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#zero_config').DataTable({
-                'responsive': true
+            var table = $('#zero_config').DataTable({
+                'responsive': true,
+                dom: 'Bfltip',
+                lengthChange: true, // Show entries
+                searching: true, //Search Hide
+                paging: true, //pagination hide
+                buttons: [{
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible',
+                    },
+                    className: 'btn btn-info btn-sm mb-3', //button design
+                    title: '<?= $pageHeading ?>', //download filename
+                    header: true // export Excel file heading visible
+                }]
             });
         });
     </script>
