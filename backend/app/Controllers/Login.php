@@ -72,6 +72,7 @@ class Login extends BaseController
                     return  redirect()->back()->with('fail', 'Incorect password.')->withInput();
                 } else {
                     session()->set('LoggedData', $logged_info);
+                    session()->set('role', $logged_info['role']);
                     return  redirect()->to('dashboard/' . Hash::path('index'));
                 }
             }
