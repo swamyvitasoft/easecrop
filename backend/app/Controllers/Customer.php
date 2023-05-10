@@ -6,6 +6,7 @@ use App\Libraries\Hash;
 use App\Models\CustomerModel;
 use App\Models\DroneModel;
 use App\Models\PaymentModel;
+use App\Models\ReferenceModel;
 
 class Customer extends BaseController
 {
@@ -14,18 +15,20 @@ class Customer extends BaseController
     private $customerInfo;
     private $customerModel;
     private $paymentModel;
+    private $referenceModel;
     public function __construct()
     {
         $this->customerModel = new CustomerModel();
         $this->loggedInfo = session()->get('LoggedData');
         $this->paymentModel = new PaymentModel();
+        $this->referenceModel = new ReferenceModel();
     }
     public function index()
     {
-        if ($this->loggedInfo['role'] == "Drone") {
-            $this->customerInfo = $this->customerModel->where(['login_id' => $this->loggedInfo['login_id']])->findAll();
-        } else {
-            $this->customerInfo = $this->customerModel->findAll();
+        if ($this->loggedInfo['role'] == "Admin") {
+            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->groupBy('customer_id')->findAll();
+        } else if ($this->loggedInfo['role'] == "Drone") {
+            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['login_id' => $this->loggedInfo['login_id']])->groupBy('customer_id')->findAll();
         }
 
         $data = [
@@ -57,6 +60,25 @@ class Customer extends BaseController
         }
         return $this->response->setJSON($data);
     }
+    public function view1()
+    {
+        $mobile = $this->request->getPost("mobile");
+        $referenceData = $this->referenceModel->where(['mobile' => $mobile])->findAll();
+        if (!empty($referenceData)) {
+            $data = [
+                'success' => true,
+                'reference_id'   => $referenceData[0]['reference_id'],
+                'name'   => $referenceData[0]['name'],
+                'mobile'   => $referenceData[0]['mobile'],
+                'msg' => "Exists Employee Check your Data"
+            ];
+        } else {
+            $data = [
+                'reference_id' => ''
+            ];
+        }
+        return $this->response->setJSON($data);
+    }
     public function show($customer_id = 0)
     {
         $customerData = $this->customerModel->where(['customer_id' => $customer_id])->findAll();
@@ -73,13 +95,10 @@ class Customer extends BaseController
     }
     public function credit()
     {
-        $this->customerModel->table('customer');
-        $this->customerModel->select('customer.*');
-        $this->customerModel->join('payment', 'payment.customer_id = customer.customer_id');
-        if ($this->loggedInfo['role'] == "Drone") {
-            $this->customerInfo = $this->customerModel->where(['payment.payment_type' => 'Credit', 'payment.login_id' => $this->loggedInfo['login_id']])->findAll();
-        } else {
-            $this->customerInfo = $this->customerModel->where(['payment.payment_type' => 'Credit'])->findAll();
+        if ($this->loggedInfo['role'] == "Admin") {
+            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['payment_type' => 'Pending'])->groupBy('customer_id')->findAll();
+        } else if ($this->loggedInfo['role'] == "Drone") {
+            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['payment_type' => 'Pending', 'login_id' => $this->loggedInfo['login_id']])->groupBy('customer_id')->findAll();
         }
         $data = [
             'pageTitle' => 'EASE CROP | Customer',
@@ -93,13 +112,10 @@ class Customer extends BaseController
     }
     public function cash()
     {
-        $this->customerModel->table('customer');
-        $this->customerModel->select('customer.*');
-        $this->customerModel->join('payment', 'payment.customer_id = customer.customer_id');
-        if ($this->loggedInfo['role'] == "Drone") {
-            $this->customerInfo = $this->customerModel->where(['payment.payment_type' => 'Cash', 'payment.login_id' => $this->loggedInfo['login_id']])->groupBy('customer.mobile')->findAll();
-        } else {
-            $this->customerInfo = $this->customerModel->where(['payment.payment_type' => 'Cash'])->groupBy('customer.mobile')->findAll();
+        if ($this->loggedInfo['role'] == "Admin") {
+            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['payment_type' => 'Paid'])->groupBy('customer_id')->findAll();
+        } else if ($this->loggedInfo['role'] == "Drone") {
+            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['payment_type' => 'Paid', 'login_id' => $this->loggedInfo['login_id']])->groupBy('customer_id')->findAll();
         }
         $data = [
             'pageTitle' => 'EASE CROP | Customer',

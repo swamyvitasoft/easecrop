@@ -18,7 +18,9 @@
                 <?php
 
                 use App\Libraries\Hash;
+                use App\Models\CustomerModel;
                 use App\Models\PaymentModel;
+                use App\Models\ReferenceModel;
 
                 if (!empty(session()->getFlashdata('fail'))) : ?>
                     <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
@@ -38,29 +40,25 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Mobile</th>
-                                            <th>Status</th>
+                                            <th>Total</th>
+                                            <th>Paid</th>
+                                            <th>Pending</th>
+                                            <th>History</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $paymentModel = new PaymentModel();
+                                        $customerModel = new CustomerModel();
                                         foreach ($customerInfo as $index => $row) {
-                                            $payment1 = $paymentModel->where(['customer_id' => $row['customer_id']])->findAll();
+                                            $customer = $customerModel->where(['customer_id' => $row['customer_id']])->find();
                                         ?>
                                             <tr>
-                                                <td><?= $row['name'] ?> </td>
-                                                <td><?= $row['mobile'] ?> </td>
-                                                <?php
-                                                if (!empty($payment1)) {
-                                                ?>
-                                                    <td><a href="<?= site_url() ?>customer/<?= Hash::path('show') ?>/<?= $row['customer_id'] ?>">Payment</a></td>
-                                                <?php
-                                                } else {
-                                                ?>
-                                                    <td>Referenced</td>
-                                                <?php
-                                                }
-                                                ?>
+                                                <td><?= $customer[0]['name'] ?> </td>
+                                                <td><?= $customer[0]['mobile'] ?> </td>
+                                                <td><?= $row['amount'] ?> </td>
+                                                <td><?= $row['paid_amount'] ?> </td>
+                                                <td><?= $row['due_amount'] ?> </td>
+                                                <td><a href="<?= site_url() ?>customer/<?= Hash::path('show') ?>/<?= $row['customer_id'] ?>"><i class="fas fa-history"></i></a></td>
                                             </tr>
                                         <?php
                                         }
@@ -70,7 +68,10 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Mobile</th>
-                                            <th>Status</th>
+                                            <th>Total</th>
+                                            <th>Paid</th>
+                                            <th>Pending</th>
+                                            <th>History</th>
                                         </tr>
                                     </tfoot>
                                 </table>

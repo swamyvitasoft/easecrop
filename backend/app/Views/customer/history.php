@@ -18,7 +18,9 @@
                 <?php
 
                 use App\Libraries\Hash;
+                use App\Models\HistoryModel;
                 use App\Models\PaymentModel;
+                use App\Models\ReferenceModel;
 
                 if (!empty(session()->getFlashdata('fail'))) : ?>
                     <div class="alert alert-danger"><?= session()->getFlashdata('fail'); ?></div>
@@ -37,32 +39,90 @@
                                     <thead>
                                         <tr>
                                             <th>Crop</th>
-                                            <th class="none">Acre</th>
-                                            <th class="none">Fertilizer</th>
-                                            <th>Payment</th>
+                                            <th>Acre</th>
+                                            <th>Fertilizer</th>
+                                            <th>Amount</th>
+                                            <th>Pending</th>
+                                            <th>Paid</th>
+                                            <th></th>
+                                            <th class="none">Reference</th>
+                                            <th class="none">Payment Hostory</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php
+                                        $referenceModel = new ReferenceModel();
+                                        $historyModel = new HistoryModel();
                                         foreach ($paymentData as $index => $row) {
+                                            $reference = $referenceModel->where(['reference_id' => $row['reference_id']])->findAll();
+                                            $history = $historyModel->where(['payment_id' => $row['payment_id']])->findAll();
                                         ?>
                                             <tr>
                                                 <td><?= $row['crop'] ?> </td>
                                                 <td><?= $row['acre'] ?> </td>
                                                 <td><?= $row['fertilizer'] ?> </td>
+                                                <td><?= $row['amount'] ?> </td>
+                                                <td><?= $row['due_amount'] ?> </td>
+                                                <td><?= $row['paid_amount'] ?> </td>
                                                 <?php
-                                                if ($row['payment_type'] == "Credit") {
+                                                if ($row['due_amount'] == 0) {
                                                 ?>
-                                                    <td>
-                                                        <button type="button" class="btn btn-warning btn-sm rounded text-white payment" value='{"payment_id" :"<?= $row['payment_id'] ?>"}'> <?= $row['amount'] ?> </button>
-                                                    </td>
-                                                <?php
+                                                    <td class="text-success">Payment Successfully</td>
+                                                    <?php
                                                 } else {
-                                                ?>
-                                                    <td class="text-success">Paid</td>
+                                                    if ($loggedInfo['role'] == "Admin") {
+                                                    ?><td>
+                                                            <button type="button" class="btn btn-warning btn-sm rounded text-white" value='{"payment_id" :"<?= $row['payment_id'] ?>"}'> PayNow </button>
+                                                        </td>
+                                                    <?php
+                                                    } else if ($loggedInfo['role'] == "Drone") {
+                                                    ?><td>
+                                                            <button type="button" class="btn btn-warning btn-sm rounded text-white pending" value='{"payment_id" :"<?= $row['payment_id'] ?>"}'> PayNow </button>
+                                                        </td>
                                                 <?php
+                                                    }
                                                 }
                                                 ?>
+                                                <td>
+                                                    <table>
+                                                        <tr>
+                                                            <td>Name</td>
+                                                            <td>Mobile</td>
+                                                        </tr>
+                                                        <?php
+                                                        foreach ($reference as $index1 => $row1) {
+                                                        ?>
+                                                            <tr>
+                                                                <td><?= $row1['name'] ?> </td>
+                                                                <td><?= $row1['mobile'] ?> </td>
+                                                            </tr>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </table>
+                                                </td>
+                                                <td>
+                                                    <table>
+                                                        <tr>
+                                                            <td>Type</td>
+                                                            <td>Amount</td>
+                                                            <td>Details</td>
+                                                            <td>Date</td>
+                                                        </tr>
+                                                        <?php
+                                                        foreach ($history as $index2 => $row2) {
+                                                        ?>
+                                                            <tr>
+                                                                <td><?= $row2['amount_type'] ?> </td>
+                                                                <td><?= $row2['amount_paid'] ?> </td>
+                                                                <td><a href="<?= site_url() ?>uploads/<?= $row2['details'] ?>" target="_new"><img src="<?= site_url() ?>uploads/<?= $row2['details'] ?>" alt="<?= $row2['details'] ?>" style="width:50px;"></a> </td>
+                                                                <td><?= $row2['create_date'] ?> </td>
+                                                            </tr>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </table>
+                                                </td>
                                             </tr>
                                         <?php
                                         }
@@ -71,9 +131,14 @@
                                     <tfoot>
                                         <tr>
                                             <th>Crop</th>
-                                            <th class="none">Acre</th>
-                                            <th class="none">Fertilizer</th>
-                                            <th>Payment</th>
+                                            <th>Acre</th>
+                                            <th>Fertilizer</th>
+                                            <th>Amount</th>
+                                            <th>Pending</th>
+                                            <th>Paid</th>
+                                            <th></th>
+                                            <th class="none">Reference</th>
+                                            <th class="none">Payment Hostory</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -86,37 +151,20 @@
     </div>
     <?= view('common/footer1') ?>
 </div>
-
 <script src="<?= site_url() ?>assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="<?= site_url() ?>assets/custom-libs/jquery.redirect.js"></script>
+
 <script>
-    $(document).ready(function() {
-        $(document).on("click", ".payment", function(e) {
-            e.preventDefault();
-            if (!confirm('Confirm to Amount Paid?')) {
-                return false;
-            }
+    jQuery(function($) {
+
+        $(document).on("click", ".pending", function(e) {
             var data = $(this);
             var values = JSON.parse(data.val());
             var payment_id = values.payment_id;
-            $.ajax({
-                type: "POST",
-                url: "<?= site_url() ?>payment/<?= Hash::path('paid') ?>",
-                data: {
-                    payment_id: payment_id
-                },
-                success: function(data) {
-                    if ($.trim(data.success)) {
-                        alert("Payment Success");
-                        window.location.reload();
-                    } else {
-                        alert("Payment Failure");
-                    }
-                },
-                error: function(data) {
-                    alert('network error try again.');
-                },
-            });
-
+            $.redirect("<?= site_url() ?>payment/<?= Hash::path('pending') ?>", {
+                "payment_id": payment_id
+            }, "POST");
         });
+
     });
 </script>
