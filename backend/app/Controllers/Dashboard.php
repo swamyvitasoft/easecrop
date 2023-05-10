@@ -25,35 +25,40 @@ class Dashboard extends BaseController
     }
     public function index()
     {
-        if ($this->loggedInfo['role'] == "Drone") {
-            $todayInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d'), 'login_id' => $this->loggedInfo['login_id']])->findAll();
-            $tomorrowInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d', strtotime('+ 1 day')), 'login_id' => $this->loggedInfo['login_id']])->findAll();
-            $cash = $this->paymentModel->where(['payment_type' => 'Cash', 'login_id' => $this->loggedInfo['login_id']])->select('sum(amount) as amount')->first();
-            $credit = $this->paymentModel->where(['payment_type' => 'Credit', 'login_id' => $this->loggedInfo['login_id']])->select('sum(amount) as amount')->first();
+        if ($this->loggedInfo['role'] == "Admin") {
             $drone = $this->droneModel->countAllResults();
-            $customer = $this->customerModel->where(['login_id' => $this->loggedInfo['login_id']])->countAllResults();
-        } else {
+            $customer = $this->paymentModel->groupBy('customer_id')->countAllResults();
+            $amount = $this->paymentModel->select('sum(amount) as amount')->first();
+            $due_amount = $this->paymentModel->select('sum(due_amount) as due_amount')->first();
+            $paid_amount = $this->paymentModel->select('sum(paid_amount) as paid_amount')->first();
             $todayInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d')])->findAll();
             $tomorrowInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d', strtotime('+ 1 day'))])->findAll();
-            $cash = $this->paymentModel->where(['payment_type' => 'Cash'])->select('sum(amount) as amount')->first();
-            $credit = $this->paymentModel->where(['payment_type' => 'Credit'])->select('sum(amount) as amount')->first();
-            $drone = $this->droneModel->countAllResults();
-            $customer = $this->customerModel->countAllResults();
+        } else if ($this->loggedInfo['role'] == "Drone") {
+            $drone = 0;
+            $customer = $this->paymentModel->where(['login_id' => $this->loggedInfo['login_id']])->groupBy('customer_id')->countAllResults();
+            $amount = $this->paymentModel->where(['login_id' => $this->loggedInfo['login_id']])->select('sum(amount) as amount')->first();
+            $due_amount = $this->paymentModel->where(['login_id' => $this->loggedInfo['login_id']])->select('sum(due_amount) as due_amount')->first();
+            $paid_amount = $this->paymentModel->where(['login_id' => $this->loggedInfo['login_id']])->select('sum(paid_amount) as paid_amount')->first();
+            $todayInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d'), 'login_id' => $this->loggedInfo['login_id']])->findAll();
+            $tomorrowInfo = $this->paymentModel->where(['estimated_date' => date('Y-m-d', strtotime('+ 1 day')), 'login_id' => $this->loggedInfo['login_id']])->findAll();
+        } else {
+            return  redirect()->to('login')->with('fail', 'You are Un-Aauthorized.');
         }
 
-        $cash = $cash['amount'] > 0 ? $cash['amount'] : '0';
-        $credit = $credit['amount'] > 0 ? $credit['amount'] : '0';
+        $paid_amount = $paid_amount['paid_amount'] > 0 ? $paid_amount['paid_amount'] : '0';
+        $due_amount = $due_amount['due_amount'] > 0 ? $due_amount['due_amount'] : '0';
+        $amount = $amount['amount'] > 0 ? $amount['amount'] : '0';
         $data = [
             'pageTitle' => 'Ease Crop | Dashboard',
             'pageHeading' => 'Dashboard',
             'loggedInfo' => $this->loggedInfo,
-            'todayInfo' => $todayInfo,
-            'tomorrowInfo' => $tomorrowInfo,
-            'cash'  => $cash,
-            'credit'  => $credit,
             'drone' => $drone,
             'customer' => $customer,
-            'payment' => $cash + $credit
+            'cash'  => $paid_amount,
+            'credit'  => $due_amount,
+            'payment' => $amount,
+            'todayInfo' => $todayInfo,
+            'tomorrowInfo' => $tomorrowInfo
         ];
         return view('common/top', $data)
             . view('dashboard/index')
@@ -115,9 +120,8 @@ class Dashboard extends BaseController
     {
         $this->paymentModel->table('payment');
         $this->paymentModel->join('customer', 'payment.customer_id = customer.customer_id');
-        $todayInfo = $this->paymentModel->groupBy('customer.mobile')->findAll();
-
-        // $todayInfo = $this->paymentModel->findAll();
+        $todayInfo = $this->paymentModel->groupBy('payment_id')->findAll();
+        
         foreach ($todayInfo as $key => $row) {
             $data[] = array(
                 'id' => $row['payment_id'],
@@ -131,8 +135,7 @@ class Dashboard extends BaseController
                 'fertilizer'  => $row['fertilizer'],
                 'start' => $row['estimated_date'],
                 'end' => $row['estimated_date'],
-                'estimated_fps'  => $row['estimated_fps'],
-                'url' => $row['mobile'],
+                'estimated_fps'  => $row['estimated_fps']
             );
         }
         echo json_encode($data);
