@@ -110,9 +110,14 @@ use App\Libraries\Hash;
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'amount') : '' ?></small>
                                 </div>
                                 <div class="form-group mt-3">
-                                    <label for="payment_type" class="form-label">Payment Type</label><br>
-                                    <input type="radio" class="form-check-input" name="payment_type" id="payment_type_cash" value="Cash" checked>Cash
-                                    <input type="radio" class="form-check-input" name="payment_type" id="payment_type_credit" value="Credit">Credit
+                                    <label for="amount_type" class="form-label">Payment Type</label><br>
+                                    <input type="radio" class="form-check-input amount_type" name="amount_type" id="amount_type_credit" value="Credit">Credit
+                                    <input type="radio" class="form-check-input amount_type" name="amount_type" id="amount_type_cash" value="Cash">Cash
+                                    <input type="radio" class="form-check-input amount_type" name="amount_type" id="amount_type_online" value="Online" checked>Online
+                                </div>
+                                <div class="form-group mt-3 details1">
+                                    <label for="details" class="form-label">Details</label>
+                                    <input type="file" name="details" class="form-control" id="details" placeholder="File Upload" value="<?= set_value('details') ?>">
                                 </div>
                                 <input type="hidden" name="customer_id" id="customer_id" value="">
                                 <input type="hidden" name="reference_id" id="reference_id" value="">
@@ -129,6 +134,14 @@ use App\Libraries\Hash;
 <script src="<?= site_url() ?>assets/libs/jquery/dist/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
+        $(".amount_type").click(function() {
+            var val = $("input[type='radio']:checked").val();
+            if (val == "Credit" || val == "Cash") {
+                $('.details1').hide();
+            } else {
+                $('.details1').show();
+            }
+        });
         $(document).on("blur", ".cmobile", function(e) {
             e.preventDefault();
             var cmobile = $(this).val();
@@ -157,13 +170,13 @@ use App\Libraries\Hash;
             var rmobile = $(this).val();
             $.ajax({
                 type: "POST",
-                url: "<?= site_url() ?>customer/<?= Hash::path('view') ?>",
+                url: "<?= site_url() ?>customer/<?= Hash::path('view1') ?>",
                 data: {
                     mobile: rmobile
                 },
                 success: function(data) {
-                    if ($.trim(data.customer_id) == '') {} else {
-                        $("#reference_id").val(data.customer_id);
+                    if ($.trim(data.reference_id) == '') {} else {
+                        $("#reference_id").val(data.reference_id);
                         $("#rname").val(data.name);
                         $("#rmobile").val(data.mobile);
                         $("#rname").attr('readonly', 'true');
