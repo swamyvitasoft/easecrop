@@ -40,6 +40,8 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Mobile</th>
+                                            <th>Ref Name</th>
+                                            <th>Ref Mobile</th>
                                             <th>Total</th>
                                             <th>Paid</th>
                                             <th>Pending</th>
@@ -49,12 +51,18 @@
                                     <tbody>
                                         <?php
                                         $customerModel = new CustomerModel();
+                                        $paymentModel = new PaymentModel();
+                                        $referenceModel = new ReferenceModel();
                                         foreach ($customerInfo as $index => $row) {
                                             $customer = $customerModel->where(['customer_id' => $row['customer_id']])->find();
+                                            $payment = $paymentModel->where(['customer_id' => $row['customer_id']])->orderBy('payment_id', 'desc')->find();
+                                            $reference = $referenceModel->where(['reference_id' => $payment[0]['reference_id']])->findAll();
                                         ?>
                                             <tr>
                                                 <td><?= $customer[0]['name'] ?> </td>
                                                 <td><?= $customer[0]['mobile'] ?> </td>
+                                                <td><?= $reference[0]['name'] ?> </td>
+                                                <td><?= $reference[0]['mobile'] ?> </td>
                                                 <td><?= $row['amount'] ?> </td>
                                                 <td><?= $row['paid_amount'] ?> </td>
                                                 <td><?= $row['due_amount'] ?> </td>
@@ -68,6 +76,8 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Mobile</th>
+                                            <th>Ref Name</th>
+                                            <th>Ref Mobile</th>
                                             <th>Total</th>
                                             <th>Paid</th>
                                             <th>Pending</th>
