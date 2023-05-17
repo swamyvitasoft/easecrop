@@ -25,10 +25,24 @@ class Customer extends BaseController
     }
     public function index()
     {
+        if (!empty($this->request->getPost("start"))) {
+            $start = $this->request->getPost("start");
+        } else {
+            $start = date('d-m-Y', strtotime('2023-01-01'));
+        }
+        if (!empty($this->request->getPost("end"))) {
+            $end = $this->request->getPost("end");
+        } else {
+            $end = date('Y-m-d');
+        }
         if ($this->loggedInfo['role'] == "Admin") {
-            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->groupBy('customer_id')->findAll();
+            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')
+                ->where('create_date BETWEEN "' . date('Y-m-d', strtotime($start)) . '" and "' . date('Y-m-d', strtotime($end)) . '"')
+                ->groupBy('customer_id')->findAll();
         } else if ($this->loggedInfo['role'] == "Drone") {
-            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['login_id' => $this->loggedInfo['login_id']])->groupBy('customer_id')->findAll();
+            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['login_id' => $this->loggedInfo['login_id']])
+                ->where('create_date BETWEEN "' . date('Y-m-d', strtotime($start)) . '" and "' . date('Y-m-d', strtotime($end)) . '"')
+                ->groupBy('customer_id')->findAll();
         }
 
         $data = [

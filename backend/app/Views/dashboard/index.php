@@ -44,16 +44,14 @@ use App\Libraries\Hash;
                 }
                 ?>
                 <div class="col">
-                    <a href="<?= site_url() ?>customer/<?= Hash::path('index') ?>">
-                        <div class="card card-hover">
-                            <div class="box bg-primary text-center">
-                                <h1 class="font-light text-white">
-                                    <?= $customer ?>
-                                </h1>
-                                <h6 class="text-white">Customer</h6>
-                            </div>
+                    <div class="card card-hover customer">
+                        <div class="box bg-primary text-center">
+                            <h1 class="font-light text-white">
+                                <?= $customer ?>
+                            </h1>
+                            <h6 class="text-white">Customer</h6>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
             <div class="row justify-content-md-center">
@@ -181,3 +179,14 @@ use App\Libraries\Hash;
     </div>
     <?= view('common/footer1') ?>
 </div>
+<script src="<?= site_url() ?>assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="<?= site_url() ?>assets/custom-libs/jquery.redirect.js"></script>
+<script>
+    jQuery(function($) {
+
+        $(document).on("click", ".customer", function(e) {
+            $.redirect("<?= site_url() ?>customer/<?= Hash::path('index') ?>", {}, "POST");
+        });
+
+    });
+</script>

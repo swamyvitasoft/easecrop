@@ -16,7 +16,9 @@ $routes->setDefaultNamespace('App\Controllers');
 $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
-$routes->set404Override();
+$routes->set404Override(function () {
+    return view('404', ['pageTitle' => 'EASE CROP | 404', 'pageHeading' => '404']);
+});
 // The Auto Routing (Legacy) is very dangerous. It is easy to create vulnerable apps
 // where controller filters or CSRF protection are bypassed.
 // If you don't want to define all routes, please use the Auto Routing (Improved).
@@ -56,7 +58,7 @@ $routes->group('/', ['filter' => 'AuthCheck'], function ($routes) {
         $routes->get(Hash::path('show') . '/(:any)', 'Drone::show/$1');
     });
     $routes->group('customer/', static function ($routes) {
-        $routes->get(Hash::path('index'), 'Customer::index');
+        $routes->post(Hash::path('index'), 'Customer::index');
         $routes->post(Hash::path('view'), 'Customer::view');
         $routes->post(Hash::path('view1'), 'Customer::view1');
         $routes->get(Hash::path('show') . '/(:any)', 'Customer::show/$1');

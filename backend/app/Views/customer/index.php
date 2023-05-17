@@ -34,6 +34,11 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-3"><input type="date" class="form-control" name="start" id="start" required></div>
+                                <div class="col-md-3"><input type="date" class="form-control" name="end" id="end" required></div>
+                                <div class="col-md-1"><input type="button" class="btn btn-warning search" value="Search"></div>
+                            </div>
                             <div class="adv-table">
                                 <table id="zero_config" class="table table-striped table-bordered w-100 d-md-table">
                                     <thead>
@@ -45,6 +50,7 @@
                                             <th>Total</th>
                                             <th>Paid</th>
                                             <th>Pending</th>
+                                            <th>Payment Date</th>
                                             <th>History</th>
                                         </tr>
                                     </thead>
@@ -66,6 +72,7 @@
                                                 <td><?= $row['amount'] ?> </td>
                                                 <td><?= $row['paid_amount'] ?> </td>
                                                 <td><?= $row['due_amount'] ?> </td>
+                                                <td><?= date('d-m-Y', strtotime($payment[0]['create_date'])) ?> </td>
                                                 <td><a href="<?= site_url() ?>customer/<?= Hash::path('show') ?>/<?= $row['customer_id'] ?>"><i class="fas fa-history"></i></a></td>
                                             </tr>
                                         <?php
@@ -81,6 +88,7 @@
                                             <th>Total</th>
                                             <th>Paid</th>
                                             <th>Pending</th>
+                                            <th>Payment Date</th>
                                             <th>History</th>
                                         </tr>
                                     </tfoot>
@@ -94,3 +102,19 @@
     </div>
     <?= view('common/footer1') ?>
 </div>
+<script src="<?= site_url() ?>assets/libs/jquery/dist/jquery.min.js"></script>
+<script src="<?= site_url() ?>assets/custom-libs/jquery.redirect.js"></script>
+<script>
+    jQuery(function($) {
+
+        $(document).on("click", ".search", function(e) {
+            var start = $('#start').val();
+            var end = $('#end').val();
+            $.redirect("<?= site_url() ?>customer/<?= Hash::path('index') ?>", {
+                "start": start,
+                "end": end,
+            }, "POST");
+        });
+
+    });
+</script>
