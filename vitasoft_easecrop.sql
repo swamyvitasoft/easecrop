@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 03, 2023 at 10:43 AM
--- Server version: 10.5.19-MariaDB
+-- Generation Time: Jun 01, 2023 at 12:28 PM
+-- Server version: 10.5.20-MariaDB
 -- PHP Version: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -31,8 +31,6 @@ CREATE TABLE `customer` (
   `customer_id` int(11) NOT NULL,
   `name` varchar(250) NOT NULL,
   `mobile` varchar(20) NOT NULL,
-  `reference_id` int(11) NOT NULL,
-  `login_id` int(11) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `create_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
@@ -41,21 +39,17 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`customer_id`, `name`, `mobile`, `reference_id`, `login_id`, `status`, `create_date`) VALUES
-(4, 'Srinu CH', '8976543212', 2, 24, 1, '2023-04-29 12:21:35'),
-(2, 'Joy', '8976543211', 0, 24, 1, '2023-04-29 12:12:39'),
-(3, 'Srikanth', '9876543212', 2, 24, 1, '2023-04-29 12:05:21'),
-(6, 'Sham', '9966466675', 0, 24, 1, '2023-04-28 16:57:27'),
-(5, 'Mahi', '9876543213', 4, 24, 1, '2023-04-29 12:05:29'),
-(7, 'Ankit ', '9160223333', 6, 24, 1, '2023-04-28 16:57:27'),
-(8, 'Srinu B', '8976543213', 2, 24, 1, '2023-04-29 12:21:55'),
-(9, 'Sanjeev', '8976543214', 2, 24, 1, '2023-04-29 12:22:02'),
-(10, 'Vijay', '7896543211', 2, 25, 1, '2023-04-29 12:23:45'),
-(11, 'Sujatha ', '996646675', 6, 24, 1, '2023-04-29 15:03:48'),
-(12, 'Mounika', '8142666662', 6, 24, 1, '2023-04-29 15:06:10'),
-(13, 'Mohan', '9394990064', 6, 27, 1, '2023-04-29 17:51:01'),
-(14, 'Easecrop ', '9052345670', 6, 27, 1, '2023-04-29 17:53:40'),
-(15, 'Hari', '9866067899', 6, 27, 1, '2023-04-30 19:23:28');
+INSERT INTO `customer` (`customer_id`, `name`, `mobile`, `status`, `create_date`) VALUES
+(10, 'Vijay', '7896543211', 1, '2023-04-29 12:23:45'),
+(18, 'Swamy', '9490043228', 1, '2023-05-09 06:30:24'),
+(13, 'Mohan', '9394990064', 1, '2023-04-29 17:51:01'),
+(14, 'Easecrop ', '9052345670', 1, '2023-04-29 17:53:40'),
+(15, 'Hari', '9866067899', 1, '2023-04-30 19:23:28'),
+(16, 'Prudhvi ', '8186866888', 1, '2023-05-05 08:34:05'),
+(19, 'Vishwa', '9849101015', 1, '2023-05-09 14:16:41'),
+(20, 'Ankit ', '9160223333', 1, '2023-05-11 05:46:16'),
+(21, 'Mounika', '9000790007', 1, '2023-05-12 08:16:39'),
+(22, 'mohan', '9392643239', 1, '2023-05-13 08:59:01');
 
 -- --------------------------------------------------------
 
@@ -82,6 +76,46 @@ INSERT INTO `drone` (`drone_id`, `drone_number`, `pilot_operator`, `mobile`, `lo
 (1, '123456', 'Swamy', '9490043228', 25, 24, 1, '2023-04-29 11:48:56'),
 (2, '1122', 'Srinu', '7995408080', 26, 24, 1, '2023-04-29 11:54:30'),
 (3, 'Fm1', 'Prudhvi ', '8142666662', 27, 24, 1, '2023-04-29 15:19:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `history`
+--
+
+CREATE TABLE `history` (
+  `history_id` int(11) NOT NULL,
+  `amount_type` varchar(50) NOT NULL,
+  `amount_paid` int(11) NOT NULL,
+  `details` varchar(500) NOT NULL,
+  `payment_id` int(11) NOT NULL,
+  `login_id` int(11) NOT NULL,
+  `create_date` datetime NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `history`
+--
+
+INSERT INTO `history` (`history_id`, `amount_type`, `amount_paid`, `details`, `payment_id`, `login_id`, `create_date`) VALUES
+(1, 'Cash', 2000, 'Cash Taken by Hand', 7, 25, '2023-05-09 09:17:47'),
+(2, 'Cash', 4000, 'Cash Taken by Hand', 16, 26, '2023-05-09 09:17:47'),
+(3, 'Cash', 5000, 'Cash Taken by Hand', 11, 27, '2023-05-09 09:17:47'),
+(4, 'Cash', 2000, 'Cash Taken by Hand', 14, 27, '2023-05-09 09:17:47'),
+(5, 'Cash', 500, 'Cash Taken by Hand', 15, 26, '2023-05-09 17:43:22'),
+(6, 'Online', 500, '1683634812_7b14da78fb137a824376.ico', 15, 26, '2023-05-09 17:50:12'),
+(7, 'Online', 1000, '1683635239_61c2a6273e839417edd8.jpeg', 15, 26, '2023-05-09 17:57:19'),
+(8, 'Cash', 2000, 'Cash Taken by Hand', 10, 27, '2023-05-09 18:16:30'),
+(9, 'Online', 5000, '1683641801_47ec69cc4f22885368a5.jpeg', 17, 25, '2023-05-09 19:46:41'),
+(10, 'Cash', 1500, 'Cash Taken by Hand', 18, 25, '2023-05-09 19:49:34'),
+(11, 'Cash', 4500, 'Cash Taken by Hand', 13, 27, '2023-05-10 21:57:25'),
+(12, 'Cash', 5000, 'Cash Taken by Hand', 10, 27, '2023-05-10 21:58:38'),
+(13, 'Cash', 4500, 'Cash Taken by Hand', 19, 27, '2023-05-11 11:16:16'),
+(14, 'Cash', 2000, 'Cash Taken by Hand', 21, 27, '2023-05-12 20:56:41'),
+(15, 'Cash', 2000, 'Cash Taken by Hand', 22, 27, '2023-05-13 14:30:12'),
+(16, 'Cash', 4000, 'Cash Taken by Hand', 23, 27, '2023-05-18 14:35:01'),
+(17, 'Cash', 3000, 'Cash Taken by Hand', 10, 27, '2023-05-18 14:37:17'),
+(18, 'Cash', 200, 'Cash Taken by Hand', 22, 27, '2023-05-28 00:38:28');
 
 -- --------------------------------------------------------
 
@@ -127,30 +161,59 @@ CREATE TABLE `payment` (
   `estimated_date` date NOT NULL,
   `estimated_fps` varchar(500) NOT NULL,
   `amount` int(11) NOT NULL,
+  `due_amount` int(11) NOT NULL,
+  `paid_amount` int(11) NOT NULL,
   `payment_type` varchar(20) NOT NULL,
   `login_id` int(11) NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
-  `create_date` datetime NOT NULL
+  `create_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `payment`
 --
 
-INSERT INTO `payment` (`payment_id`, `customer_id`, `crop_place`, `reference_id`, `acre`, `service`, `crop`, `crop_age`, `fertilizer`, `estimated_date`, `estimated_fps`, `amount`, `payment_type`, `login_id`, `status`, `create_date`) VALUES
-(1, 3, 'Karimnagar', 2, 2, 'Spray', 'Rice', 6, 'Fertilizer', '2023-04-28', 'Fertilizer', 500, 'Cash', 24, 1, '2023-04-28 03:22:26'),
-(2, 5, 'Knr', 4, 2, 'Spread', 'Corn', 3, 'Fertilizer', '2023-04-29', 'Fertilizer', 1000, 'Cash', 24, 1, '2023-04-28 03:22:28'),
-(3, 3, 'Kpl', 2, 1, 'Spread', 'Rice', 4, 'Fertilizer', '2023-04-30', 'Fertilizer', 600, 'Cash', 24, 1, '2023-04-28 03:22:31'),
-(4, 7, 'Khammam', 6, 10, 'Spray', 'Paddy', 20, 'Pesticides', '2023-05-10', 'Fertilizer', 4500, 'Cash', 24, 1, '2023-04-28 03:22:17'),
-(5, 2, 'Wgl', 8, 5, 'Seeding', 'Vegetables', 2, 'Pesticides', '2023-05-06', 'Fertilizer', 1000, 'Cash', 24, 1, '2023-04-29 16:58:16'),
-(6, 4, 'Khm', 9, 1, 'Spray', 'Vegetables', 1, 'Seeds', '2023-04-30', 'Fertilizer', 800, 'Cash', 24, 1, '2023-04-29 17:03:53'),
-(7, 10, 'Karim Nagar', 2, 2, 'Seeding', 'Cotton', 4, 'Fertilizer', '2023-05-01', 'Fertilizer', 2000, 'Cash', 25, 1, '2023-04-29 17:53:45'),
-(8, 11, 'Kusumanchi', 6, 5, 'Spray', 'Chilly', 28, 'Pesticides', '2023-05-08', 'Fertilizer', 2500, 'Cash', 24, 1, '2023-04-29 20:33:48'),
-(9, 12, 'Khammam', 6, 6, 'Spread', 'Paddy', 45, 'Pesticides', '2023-05-10', 'Fertilizer', 3000, 'Cash', 24, 1, '2023-04-29 20:36:10'),
-(10, 13, 'Manugur', 6, 20, 'Spray', 'Sugar cane ', 50, 'Pesticides', '2023-05-30', 'Fertilizer', 10000, 'Credit', 27, 1, '2023-04-29 23:21:01'),
-(11, 14, 'Hyd', 6, 5, 'Spread', 'Paddy seed', 5, 'Pesticides', '2023-04-30', 'Fertilizer', 5000, 'Cash', 27, 1, '2023-04-29 23:23:40'),
-(12, 7, 'Khammam', 6, 10, 'Spray', 'Paddy', 25, 'Pesticides', '2023-05-16', 'Gi', 4000, 'Credit', 27, 1, '2023-05-01 00:50:43'),
-(13, 15, 'Warangal ', 6, 10, 'Spread', 'Chilli ', 55, 'Pesticides', '2023-05-02', 'Gi', 4500, 'Credit', 27, 1, '2023-05-01 00:53:28');
+INSERT INTO `payment` (`payment_id`, `customer_id`, `crop_place`, `reference_id`, `acre`, `service`, `crop`, `crop_age`, `fertilizer`, `estimated_date`, `estimated_fps`, `amount`, `due_amount`, `paid_amount`, `payment_type`, `login_id`, `status`, `create_date`) VALUES
+(7, 10, 'Karim Nagar', 1, 2, 'Seeding', 'Cotton', 4, 'Fertilizer', '2023-05-01', 'Fertilizer', 2000, 0, 2000, 'Paid', 25, 1, '2023-04-29 21:53:45'),
+(16, 18, 'KNR', 8, 3, 'Spread', 'Paddy', 60, 'Pesticides', '2023-05-11', 'Hydro', 4000, 0, 4000, 'Paid', 26, 1, '2023-05-09 16:30:20'),
+(10, 13, 'Manugur', 2, 20, 'Spray', 'Sugar cane ', 50, 'Pesticides', '2023-05-30', 'Fertilizer', 10000, 0, 10000, 'Paid', 27, 1, '2023-05-18 09:07:17'),
+(11, 14, 'Hyd', 2, 5, 'Spread', 'Paddy seed', 5, 'Pesticides', '2023-04-30', 'Fertilizer', 5000, 0, 5000, 'Paid', 27, 1, '2023-04-30 03:23:40'),
+(15, 18, 'Karimnagar', 8, 2, 'Spread', 'pady', 60, 'Pesticides', '2023-05-10', 'Hydro', 3500, 1500, 2000, 'Pending', 26, 1, '2023-05-09 12:27:19'),
+(13, 15, 'Warangal ', 2, 10, 'Spread', 'Chilli ', 55, 'Pesticides', '2023-05-02', 'Gi', 4500, 0, 4500, 'Paid', 27, 1, '2023-05-10 16:27:25'),
+(14, 16, 'Manugur', 3, 5, 'Spray', 'Paddy', 30, 'Pesticides', '2023-05-06', 'Hydro', 2000, 0, 2000, 'Paid', 27, 1, '2023-05-05 18:04:05'),
+(17, 19, 'Karimnagar', 9, 2, 'Spread', 'Paddy', 45, 'Fertilizer', '2023-05-11', 'Ferti', 5000, 0, 5000, 'Paid', 25, 1, '2023-05-09 23:46:41'),
+(18, 19, 'KNR', 8, 5, 'Spray', 'Chilli', 50, 'Fertilizer', '2023-05-10', 'Fertilizer', 8000, 6500, 1500, 'Pending', 25, 1, '2023-05-09 14:19:34'),
+(19, 20, 'Warangal ', 2, 10, 'Spray', 'Chilli ', 60, 'Fertilizer', '2023-05-12', 'hydro', 4500, 0, 4500, 'Paid', 27, 1, '2023-05-11 15:16:16'),
+(20, 21, 'Bmc', 2, 10, 'Spray', 'Paddy', 50, 'Pesticides', '2023-05-13', 'Gi', 4000, 4000, 0, 'Pending', 27, 1, '2023-05-12 17:46:39'),
+(21, 16, 'Warangal ', 2, 5, 'Spray', 'Paddy', 40, 'Pesticides', '2023-05-13', 'gi', 2000, 0, 2000, 'Paid', 27, 1, '2023-05-13 00:56:41'),
+(22, 22, 'bcm', 2, 10, 'Spray', 'Paddy', 20, 'Pesticides', '2023-05-14', 'gia', 4000, 1800, 2200, 'Pending', 27, 1, '2023-05-27 19:08:28'),
+(23, 20, 'Manugur', 2, 20, 'Spray', 'Paddy ', 20, 'Pesticides', '2023-05-20', 'Gi', 4000, 0, 4000, 'Paid', 27, 1, '2023-05-18 18:35:01'),
+(24, 21, 'Bcm', 3, 50, 'Spray', 'Chilly', 50, 'Pesticides', '2023-05-19', 'Hydro', 2000, 2000, 0, 'Pending', 27, 1, '2023-05-18 18:35:50');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reference`
+--
+
+CREATE TABLE `reference` (
+  `reference_id` int(11) NOT NULL,
+  `name` varchar(250) NOT NULL,
+  `mobile` varchar(20) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `create_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `reference`
+--
+
+INSERT INTO `reference` (`reference_id`, `name`, `mobile`, `status`, `create_date`) VALUES
+(1, 'Joy', '8976543211', 1, '2023-05-09 07:16:32'),
+(2, 'Sham', '9966466675', 1, '2023-05-09 07:16:35'),
+(3, 'Ankit', '9160223333', 1, '2023-05-09 07:16:40'),
+(8, 'SS', '7995408080', 1, '2023-05-09 07:17:02'),
+(9, 'Solutions', '9490043228', 1, '2023-05-09 14:16:41');
 
 --
 -- Indexes for dumped tables
@@ -169,6 +232,12 @@ ALTER TABLE `drone`
   ADD PRIMARY KEY (`drone_id`);
 
 --
+-- Indexes for table `history`
+--
+ALTER TABLE `history`
+  ADD PRIMARY KEY (`history_id`);
+
+--
 -- Indexes for table `login`
 --
 ALTER TABLE `login`
@@ -181,6 +250,12 @@ ALTER TABLE `payment`
   ADD PRIMARY KEY (`payment_id`);
 
 --
+-- Indexes for table `reference`
+--
+ALTER TABLE `reference`
+  ADD PRIMARY KEY (`reference_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -188,13 +263,19 @@ ALTER TABLE `payment`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `drone`
 --
 ALTER TABLE `drone`
   MODIFY `drone_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `history`
+--
+ALTER TABLE `history`
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `login`
@@ -206,7 +287,13 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `reference`
+--
+ALTER TABLE `reference`
+  MODIFY `reference_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
