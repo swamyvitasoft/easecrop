@@ -59,7 +59,7 @@ use App\Libraries\Hash;
                                 </div>
                                 <div class="form-group mt-3">
                                     <label for="acre" class="form-label">Acre</label>
-                                    <input type="number" name="acre" class="form-control form-control-lg" id="acre" placeholder="Acre" value="<?= set_value('acre') ?>">
+                                    <input type="number" name="acre" class="form-control form-control-lg" id="acre" min="0" max="100" step="0.01" placeholder="Acre" value="<?= set_value('acre') ?>">
                                     <small class="text-danger"><?= !empty(session()->getFlashdata('validation')) ? display_error(session()->getFlashdata('validation'), 'acre') : '' ?></small>
                                 </div>
                                 <div class="form-group mt-3">
@@ -121,7 +121,7 @@ use App\Libraries\Hash;
                                 </div>
                                 <input type="hidden" name="customer_id" id="customer_id" value="">
                                 <input type="hidden" name="reference_id" id="reference_id" value="">
-                                <div class="text-center"><button type="submit" class="btn btn-success btn-lg">Payment</button></div>
+                                <div class="text-center"><button type="submit" class="btn btn-success btn-lg">Submit</button></div>
                             </form>
                         </div>
                     </div>

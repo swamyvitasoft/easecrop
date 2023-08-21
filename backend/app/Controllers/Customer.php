@@ -25,24 +25,15 @@ class Customer extends BaseController
     }
     public function index()
     {
-        if (!empty($this->request->getPost("start"))) {
-            $start = $this->request->getPost("start");
-        } else {
-            $start = date('d-m-Y', strtotime('2023-01-01'));
-        }
-        if (!empty($this->request->getPost("end"))) {
-            $end = $this->request->getPost("end");
-        } else {
-            $end = date('Y-m-d');
-        }
         if ($this->loggedInfo['role'] == "Admin") {
-            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')
-                ->where('create_date BETWEEN "' . date('Y-m-d', strtotime($start)) . '" and "' . date('Y-m-d', strtotime($end)) . '"')
-                ->groupBy('customer_id')->findAll();
+            $this->customerInfo = $this->customerModel->table('customer')
+                ->join('payment', 'payment.customer_id = customer.customer_id')
+                ->groupBy('payment.customer_id')->findAll();
         } else if ($this->loggedInfo['role'] == "Drone") {
-            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['login_id' => $this->loggedInfo['login_id']])
-                ->where('create_date BETWEEN "' . date('Y-m-d', strtotime($start)) . '" and "' . date('Y-m-d', strtotime($end)) . '"')
-                ->groupBy('customer_id')->findAll();
+            $this->customerInfo = $this->customerModel->table('customer')
+                ->join('payment', 'payment.customer_id = customer.customer_id')
+                ->where(['payment.login_id' => $this->loggedInfo['login_id']])
+                ->groupBy('payment.customer_id')->findAll();
         }
 
         $data = [
@@ -96,7 +87,7 @@ class Customer extends BaseController
     public function show($customer_id = 0)
     {
         $customerData = $this->customerModel->where(['customer_id' => $customer_id])->findAll();
-        $paymentData = $this->paymentModel->where(['customer_id' => $customer_id])->findAll();
+        $paymentData = $this->paymentModel->where(['customer_id' => $customer_id, 'login_id' => $this->loggedInfo['login_id']])->findAll();
         $data = [
             'pageTitle' => 'EASE CROP | Customer',
             'pageHeading' => 'Customer(' . $customerData[0]['name'] . ')',
@@ -110,9 +101,15 @@ class Customer extends BaseController
     public function credit()
     {
         if ($this->loggedInfo['role'] == "Admin") {
-            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['payment_type' => 'Pending'])->groupBy('customer_id')->findAll();
+            $this->customerInfo = $this->customerModel->table('customer')
+                ->join('payment', 'payment.customer_id = customer.customer_id')
+                ->where(['payment.payment_type' => 'Pending'])
+                ->groupBy('payment.customer_id')->findAll();
         } else if ($this->loggedInfo['role'] == "Drone") {
-            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['payment_type' => 'Pending', 'login_id' => $this->loggedInfo['login_id']])->groupBy('customer_id')->findAll();
+            $this->customerInfo = $this->customerModel->table('customer')
+                ->join('payment', 'payment.customer_id = customer.customer_id')
+                ->where(['payment.payment_type' => 'Pending', 'payment.login_id' => $this->loggedInfo['login_id']])
+                ->groupBy('payment.customer_id')->findAll();
         }
         $data = [
             'pageTitle' => 'EASE CROP | Customer',
@@ -127,9 +124,15 @@ class Customer extends BaseController
     public function cash()
     {
         if ($this->loggedInfo['role'] == "Admin") {
-            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['payment_type' => 'Paid'])->groupBy('customer_id')->findAll();
+            $this->customerInfo = $this->customerModel->table('customer')
+                ->join('payment', 'payment.customer_id = customer.customer_id')
+                ->where(['payment.payment_type' => 'Paid'])
+                ->groupBy('payment.customer_id')->findAll();
         } else if ($this->loggedInfo['role'] == "Drone") {
-            $this->customerInfo = $this->paymentModel->select('customer_id,sum(amount) as amount,sum(paid_amount) as paid_amount,sum(due_amount) as due_amount')->where(['payment_type' => 'Paid', 'login_id' => $this->loggedInfo['login_id']])->groupBy('customer_id')->findAll();
+            $this->customerInfo = $this->customerModel->table('customer')
+                ->join('payment', 'payment.customer_id = customer.customer_id')
+                ->where(['payment.payment_type' => 'Paid', 'payment.login_id' => $this->loggedInfo['login_id']])
+                ->groupBy('payment.customer_id')->findAll();
         }
         $data = [
             'pageTitle' => 'EASE CROP | Customer',
